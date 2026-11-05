@@ -2,9 +2,9 @@
 import os
 
 DATABASE = "library.db"
-SECRET_KEY = "mylibrarysecret123"                  # P1: hardcoded secret (negative test)
-DEBUG = True                                        # P2: debug ON (negative test)
-LOG_FILE = "logs/app.log"                           # P3: alag log file
+SECRET_KEY = os.getenv("SECRET_KEY", "change-me-locally")   # P1: secret code mein nahi
+DEBUG = False                                                # P2: debug OFF
+LOG_FILE = "logs/app.log"                                    # P3: alag log file
 
 # --- Library identification -------------------------------------------------
 LIBRARY_NAME = "shubhamkumar's Library"  # Updated for assignment requirement
