@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+logs/
+compliance_report.txt
+.env
+library.db

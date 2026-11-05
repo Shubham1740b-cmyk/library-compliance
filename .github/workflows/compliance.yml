@@ -1,0 +1,36 @@
+name: Compliance as Code
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  compliance:                       # STAGE 1 - compliance gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run compliance policies
+        run: python compliance_check.py
+      - name: Upload compliance report        # runs even when the check fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-report
+          path: compliance_report.txt
+
+  build-and-test:                   # STAGE 2 - runs ONLY if compliance PASSED
+    needs: compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python seed.py
+      - run: python -c "import app; print('Library app loads OK')"
+      - run: echo "Deploying Library Management System..."
